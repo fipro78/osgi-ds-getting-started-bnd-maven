@@ -1,0 +1,9 @@
+-tester: biz.aQute.tester.junit-platform
+
+-runfw: org.eclipse.osgi
+-resolve.effective: active
+
+-runrequires: \
+	bnd.identity;id='${project.artifactId}-tests'
+	
+# -runbundles is calculated by the bnd-resolver-maven-plugin

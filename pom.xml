@@ -80,6 +80,14 @@
 				<scope>runtime</scope>
 			</dependency>
 
+			<!-- OSGi Namespace Service -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.namespace.service</artifactId>
+				<version>1.0.0</version>
+				<scope>provided</scope>
+			</dependency>
+
 			<!--  The Gogo Shell  -->
 			<dependency>
 				<groupId>org.apache.felix</groupId>
@@ -106,19 +114,41 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
+			<!-- Test Dependencies -->
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.11.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.test.bom</artifactId>
+				<version>1.3.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<build>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.11.0</version>
+					<version>3.13.0</version>
 					<configuration>
 						<release>${java.version}</release>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.5.1</version>
 				</plugin>
 
 				<!-- Use the bnd-maven-plugin and assemble the symbolic names -->
@@ -126,6 +156,7 @@
 					<groupId>biz.aQute.bnd</groupId>
 					<artifactId>bnd-maven-plugin</artifactId>
 					<version>${bnd.version}</version>
+					<extensions>true</extensions>
 					<configuration>
 						<bnd>
             <![CDATA[
@@ -148,7 +179,7 @@ Bundle-SymbolicName: ${project.artifactId}
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.2.0</version>
+					<version>3.4.2</version>
 					<configuration>
 						<archive>
 							<manifestFile>
@@ -202,10 +233,27 @@ Bundle-SymbolicName: ${project.artifactId}
 						<bndruns></bndruns>
 					</configuration>
 					<executions>
+						<!-- Integration Test Configuration -->
 						<execution>
+							<id>resolve-test</id>
+							<phase>pre-integration-test</phase>
 							<goals>
 								<goal>resolve</goal>
 							</goals>
+							<configuration>
+								<outputBndrunDir>${project.build.directory}</outputBndrunDir>
+								<bndruns>
+									<include>test.bndrun</include>
+								</bndruns>
+								<failOnChanges>false</failOnChanges>
+								<includeDependencyManagement>true</includeDependencyManagement>
+								<reportOptional>false</reportOptional>
+								<scopes>
+									<scope>compile</scope>
+									<scope>runtime</scope>
+									<scope>test</scope>
+								</scopes>
+							</configuration>
 						</execution>
 					</executions>
 				</plugin>
@@ -226,16 +274,32 @@ Bundle-SymbolicName: ${project.artifactId}
 						</execution>
 					</executions>
 				</plugin>
-				<!-- Define the version of the testing plugin that we use -->
+				<!-- Define the version of the testing plugin that we use 
+				and the integration tests execution -->
 				<plugin>
 					<groupId>biz.aQute.bnd</groupId>
 					<artifactId>bnd-testing-maven-plugin</artifactId>
 					<version>${bnd.version}</version>
 					<executions>
+						<!-- OSGi integration tests execution -->
 						<execution>
 							<goals>
 								<goal>testing</goal>
 							</goals>
+							<configuration>
+								<bndrunDir>${project.build.directory}</bndrunDir>
+								<bndruns>
+									<include>test.bndrun</include>
+								</bndruns>
+								<failOnChanges>false</failOnChanges>
+								<includeDependencyManagement>true</includeDependencyManagement>
+								<resolve>false</resolve>
+								<scopes>
+									<scope>compile</scope>
+									<scope>runtime</scope>
+									<scope>test</scope>
+								</scopes>
+							</configuration>
 						</execution>
 					</executions>
 				</plugin>
@@ -260,10 +324,11 @@ Bundle-SymbolicName: ${project.artifactId}
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 	<modules>
 		<module>org.fipro.inverter.api</module>
 		<module>org.fipro.inverter.provider</module>
 		<module>org.fipro.inverter.command</module>
+		<module>org.fipro.inverter.integration.tests</module>
 	</modules>
 </project>
