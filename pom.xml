@@ -64,6 +64,60 @@
 				</exclusions>
 			</dependency>
 
+			<!--  Configuration Admin  -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.service.cm</artifactId>
+				<version>1.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.configadmin</artifactId>
+				<version>1.9.26</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<!--  OSGi Configurator  -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.service.configurator</artifactId>
+				<version>1.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.configurator</artifactId>
+				<version>1.0.18</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.cm.json</artifactId>
+				<version>2.0.6</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.parsson</groupId>
+				<artifactId>jakarta.json</artifactId>
+				<version>1.1.6</version>
+			</dependency>
+
+			<!--  OSGi Condition Service  -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.service.condition</artifactId>
+				<version>1.0.0</version>
+				<type>jar</type>
+			</dependency>
+
+			<!--  OSGi Converter  -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.util.converter</artifactId>
+				<version>1.0.9</version>
+				<scope>runtime</scope>
+			</dependency>
+
 			<!--  OSGi Function  -->
 			<dependency>
 				<groupId>org.osgi</groupId>
@@ -163,6 +217,8 @@
 Bundle-SymbolicName: ${project.artifactId}
 -sources: true
 -contract: *
+-noimportjava: true
+-fixupmessages: The JAR is empty:
 ]]>
           </bnd>
 					</configuration>
@@ -330,5 +386,12 @@ Bundle-SymbolicName: ${project.artifactId}
 		<module>org.fipro.inverter.provider</module>
 		<module>org.fipro.inverter.command</module>
 		<module>org.fipro.inverter.integration.tests</module>
+		<module>org.fipro.ds.configurable</module>
+		<module>org.fipro.ds.other</module>
+		<module>org.fipro.ds.configurator</module>
+		<module>org.fipro.ds.data.api</module>
+		<module>org.fipro.ds.data.offline</module>
+		<module>org.fipro.ds.data.online</module>
+		<module>org.fipro.ds.config</module>
 	</modules>
 </project>
